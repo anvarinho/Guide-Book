@@ -1,0 +1,22 @@
+<div class="activities">
+    <div class="activities__header">
+        <h2>Tours</h2>
+    </div>
+    {% for tour in tours %}
+    <div class="activities__box">
+        <div class="activities__boxHeader roomListRoom__header">
+            <a href="{% url 'tour' tour.id %}" class="roomListRoom__author">
+                <p>
+                    {{tour.name}}
+                    <span> {{tour.title}}</span>
+                </p>
+            </a>
+        </div>
+        <div class="activities__boxContent">
+            <div class="activities__boxRoomContent">
+                <img src="{{tour.image.url}}" alt="" style="border-radius: 3px;">
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
