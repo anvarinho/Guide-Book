@@ -19,9 +19,25 @@
       </div>
     </div> -->
     <!-- <div class="roomListRoom__content"> -->
-    <div>
-      <img src="{{room.image.url}}" alt="img" style="border-radius: 5px">
+    <!-- Image Carousel Start -->
+    <div class="slideshow-container fade">
+      {% for image in room.images.all %}
+      <div class="Containers">
+        <a class="Back" onclick="plusSlides(-1)">&#10094;</a>
+        <img src="{{image.image.url}}" alt="img" style="width:100%; border-radius: 5px">
+        <div class="MessageInfo">{{image.message}}</div>
+        <div class="Info">{{image.info}}</div>
+        <a class="forward" onclick="plusSlides(1)">&#10095;</a>
+      </div>
+      {% endfor %}
     </div>
+    <div style="text-align:center">
+      {% for image in room.images.all %}
+      <span class="dots" onclick="currentSlide({{forloop.counter}})"></span>
+      {% endfor %}
+    </div>
+    <!-- Image Carousel End -->
+
     <div class="roomListRoom__content">
       <a>{{room.name}}</a>
       <p>
@@ -47,10 +63,29 @@
         </svg>
         {{room_messages.all.count}} Comments
       </a>
-      <p class="roomListRoom__topic">{{room.location.name}}</p>
+      <a class="roomListRoom__topic" href="{% url 'home' %}?q={{room.region.name}}">{{room.region.name}}</a>
 
     </div>
   </div>
+  <!-- Sights view -->
+  {% if room.sights.all.count != 0 %}
+  <div class="roomListRoom" style="width:90%;margin-left: auto;margin-right: auto;display: block;text-align: center;">
+    <div class="roomListRoom__content"><a>Sights</a></div>
+    <div class="container1 flow" style="width:100%">
+      <div class="media-scroller snaps-inline">
+        {% for sight in room.sights.all %}
+        <div class="media-element">
+          <a href="{% url 'sight' sight.id %}"><img src="{{sight.images.first.image.url}}" alt=""
+              style="border-radius: 5px; padding: 2px;"></a>
+          <p class="title">{{sight.name}}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  <!-- Sights View End -->
+
   <div class="roomListRoom" style="width:90%;margin-left: auto;margin-right: auto;display: block;text-align: center;">
     <div class="threads scroll" style="margin-top: 0vh;padding-bottom: 0vh;">
       {% for message in room_messages reversed %}
@@ -249,6 +284,6 @@
     <!--  End -->
   </div>
 </main>
-<!-- <script src="script.js"></script> -->
+<script src="/static/js/carousel.js"></script>
 
 {% endblock %}

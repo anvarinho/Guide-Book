@@ -20,5 +20,7 @@ urlpatterns = [
     path('activity/', views.activityPage, name='activity'),
 
     path('tours/', views.toursPage, name='tours'),
-    path('tour/<str:pk>/', views.tour, name='tour')
+    path('tour/<str:pk>/', views.tour, name='tour'),
+    path('day/<str:pk>/', views.day, name='day'),
+    path('sight/<str:pk>/', views.sight, name='sight')
 ]

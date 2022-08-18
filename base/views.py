@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
-from .models import Day, Room, Location, Message, Tour, User
+from .models import Day, Region, Room, Location, Message, Sight, Tour, User
 from .forms import RoomForm, UserForm, MyUserCreationForm
 from django.core.paginator import Paginator
 
@@ -54,26 +54,27 @@ def registerPage(request):
             login(request, user)
             return redirect('home')
         else:
-            messages.error(request, 'An error occurred during registration')
+            messages.error(request, 'An error occurred during registration!')
     return render(request, 'base/login_register.html', {'form': form})
 
 
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
     rooms = Room.objects.filter(
-        Q(location__name__icontains=q) |
+        Q(region__name__icontains=q) |
         Q(name__icontains=q) 
         # Q(description__icontains=q)
     )
     paginator = Paginator(rooms, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    locations = Location.objects.all()[0:7]
+    locations = Region.objects.all()[0:7]
+    locations_count = Region.objects.all().count()
     rooms_count = rooms.count()
     room_messages = Message.objects.filter(Q(room__location__name__icontains=q)).order_by('-created')
     days = Day.objects.all()
     tours = Tour.objects.all()
-    context = {'rooms': page_obj, 'locations': locations, 'rooms_count': rooms_count, 'room_messages': room_messages, 'tours': tours, 'days': days}
+    context = {'rooms': page_obj, 'locations': locations, 'rooms_count': rooms_count, 'room_messages': room_messages, 'tours': tours, 'days': days, 'locations_count': locations_count}
     return render(request, "base/home.html", context)
 
 def room(request, pk):
@@ -97,12 +98,23 @@ def tour(request, pk):
     context = {'tour': tour, 'days': days}
     return render(request, "base/tour.html", context)
 
+def day(request, pk):
+    day = Day.objects.get(id=pk)
+    context = {'day': day}
+    return render(request, "base/day.html", context)
+
+def sight(request, pk):
+    sight = Sight.objects.get(id=pk)
+    context = {'sight': sight}
+    return render(request, "base/sight.html", context)
+
 def userProfile(request, pk):
     user = User.objects.get(id=pk)
     rooms = user.room_set.all()
     room_messages = user.message_set.all()
-    locations = Location.objects.all()
-    context = {'user': user, 'rooms': rooms, 'room_messages': room_messages, 'locations': locations}
+    locations = Region.objects.all()[0:7]
+    locations_count = Region.objects.all().count()
+    context = {'user': user, 'rooms': rooms, 'room_messages': room_messages, 'locations': locations, 'locations_count': locations_count}
     return render(request, 'base/profile.html', context)
 
 @login_required(login_url='login')
@@ -156,7 +168,6 @@ def deleteRoom(request, pk):
 @login_required(login_url='login')
 def deleteMessage(request, pk):
     message = Message.objects.get(id=pk)
-
     if request.user != message.user:
         return HttpResponse("You are not allowed here!!!")
 
@@ -180,7 +191,7 @@ def updateUser(request):
 
 def topicsPage(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
-    locations = Location.objects.filter(name__icontains=q)
+    locations = Region.objects.filter(name__icontains=q)
     return render(request, 'base/topics.html', {'locations': locations})
 
 def activityPage(request):

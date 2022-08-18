@@ -2,12 +2,15 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import Activity, Room, Location, Message, Tour, User, Day
+from .models import Activity, ImageModel, Region, Room, Location, Message, Sight, Tour, User, Day
 
 admin.site.register(User)
+admin.site.register(Sight)
+admin.site.register(Region)
 admin.site.register(Room)
 admin.site.register(Location)
 admin.site.register(Message)
 admin.site.register(Day)
 admin.site.register(Tour)
 admin.site.register(Activity)
+admin.site.register(ImageModel)

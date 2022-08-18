@@ -1,13 +1,14 @@
 {% for room in rooms %}
 <div class="roomListRoom">
-  <div class="roomListRoom__content">
+  <div class="roomListRoom__content" style="margin-top: 0px;">
     <a href="{% url 'room' room.id %}">{{room.name}}</a>
     <p>
       {{room.title}}
     </p>
   </div>
   <div>
-    <img src="{{room.image.url}}" alt="img" style="border-radius: 5px">
+    <a href="{% url 'room' room.id %}"><img src="{{room.images.first.image.url}}" alt="img"
+        style="border-radius: 5px"></a>
   </div>
   <div class="roomListRoom__meta">
     <a href="{% url 'room' room.id %}" class="roomListRoom__joined">
@@ -28,7 +29,7 @@
       </svg>
       {{room.participants.all.count}} Joined
     </a>
-    <p class="roomListRoom__topic">{{room.location.name}}</p>
+    <a class="roomListRoom__topic" href="{% url 'home' %}?q={{room.region.name}}">{{room.region.name}}</a>
 
   </div>
 </div>

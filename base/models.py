@@ -6,11 +6,14 @@ class User(AbstractUser):
     name = models.CharField(max_length=200, null=True)
     email = models.EmailField(unique=True, null=True)
     bio = models.TextField(null=True)
-
     avatar = models.ImageField(null=True, default='avatar.svg')
-
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
+
+class Region(models.Model):
+    name = models.CharField(max_length=200)
+    def __str__(self):
+        return self.name
 
 class Location(models.Model):
     name = models.CharField(max_length=200)
@@ -24,17 +27,34 @@ class Topic(models.Model):
     def __str__(self):
         return self.name
 
+class ImageModel(models.Model):
+    message = models.CharField(max_length=200, default='image')
+    info = models.TextField(null=True)
+    image = models.ImageField(null=True, default='avatar.svg')
+    def __str__(self):
+        return self.message
+
+class Sight(models.Model):
+    name = models.CharField(max_length=200)
+    title = models.TextField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    location = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True)
+    images = models.ManyToManyField(ImageModel, related_name='imgs', blank=True)
+    def __str__(self):
+        return self.name
 
 class Room(models.Model):
     host = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     location = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True)
+    region = models.ForeignKey(Region, on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=200)
     title = models.TextField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
+    sights = models.ManyToManyField(Sight, related_name='sights', blank=True)
     participants = models.ManyToManyField(User, related_name='participants', blank=True)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
-    image = models.ImageField(null=True, default='avatar.svg')
+    images = models.ManyToManyField(ImageModel, related_name='photos', blank=True)
 
     # id = models.UUIDField(primary_key=True)
 
@@ -57,12 +77,14 @@ class Message(models.Model):
 
 class Activity(models.Model):
     name = models.TextField(null=True, blank=True)
+    def __str__(self):
+        return self.name
 
 class Day(models.Model):
     name = models.CharField(max_length=200)
     title = models.TextField(null=True, blank=True)
     rooms = models.ManyToManyField(Room, related_name='rooms', blank=True)
-    image = models.ImageField(null=True, default='Jeti-Oguz-2_2.jpg')
+    images = models.ManyToManyField(ImageModel, related_name='images', blank=True)
     activities = models.ManyToManyField(Activity, related_name='activities', blank=True)
     def __str__(self):
         return self.name
@@ -72,7 +94,7 @@ class Tour(models.Model):
     title = models.TextField(null=True, blank=True)
     price = models.IntegerField()
     description = models.TextField(null=True, blank=True)
-    image = models.ImageField(null=True, default='Jeti-Oguz-2_2.jpg')
+    images = models.ManyToManyField(ImageModel, related_name='pictures', blank=True)
     days = models.ManyToManyField(Day, related_name='days', blank=True)
     def __str__(self):
         return self.name
@@ -97,4 +119,3 @@ def create_superuser(self, email, full_name, profile_picture, password=None, **e
         user.active = True
         user.save(using=self._db)
         return user
-

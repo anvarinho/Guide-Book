@@ -1,0 +1,40 @@
+{% extends 'main.html' %}
+{% block content %}
+<main class="create-room layout">
+    <div class="container">
+        <div class="layout__box">
+            <div class="layout__boxHeader">
+                <div class="layout__boxTitle">
+                    <a href="{{request.META.HTTP_REFERER}}">
+                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                            viewBox="0 0 32 32">
+                            <title>arrow-left</title>
+                            <path
+                                d="M13.723 2.286l-13.723 13.714 13.719 13.714 1.616-1.611-10.96-10.96h27.625v-2.286h-27.625l10.965-10.965-1.616-1.607z">
+                            </path>
+                        </svg>
+                    </a>
+                    <h3>Back</h3>
+                </div>
+
+            </div>
+            <div>
+                <H1 style="padding: 15px;">{{day.name}}</H1>
+                <div class="slideshow-container fade" style="margin: 10px;">
+                    {% for image in day.images.all %}
+                    <div class="Containers Carousel">
+                        <a class="Back" onclick="plusSlides(-1)">&#10094;</a>
+                        <img src="{{image.image.url}}" alt="img" style="width:100%; border-radius: 5px">
+                        <div class="MessageInfo">{{image.message}}</div>
+                        <div class="Info">{{image.info}}</div>
+                        <a class="forward" onclick="plusSlides(1)">&#10095;</a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+<script src="/static/js/carousel.js"></script>
+{% endblock content %}

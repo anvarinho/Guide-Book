@@ -4,8 +4,20 @@
 <main class="profile-page layout layout--2">
 
     <div class="roomListRoom" style="width:90%;margin-left: auto;margin-right: auto;display: block;text-align: center;">
-        <div>
-            <img src="{{tour.image.url}}" alt="img" style="border-radius: 5px">
+        <div class="slideshow-container fade">
+            {% for image in tour.images.all %}
+            <div class="Containers">
+                {% if image != tour.images.all.first %}
+                <a class="Back" onclick="plusSlides(-1)">&#10094;</a>
+                {% endif %}
+                <img src="{{image.image.url}}" alt="img" style="width:100%; border-radius: 5px">
+                <div class="MessageInfo">{{image.message}}</div>
+                <div class="Info">{{image.info}}</div>
+                {% if image != tour.images.all.last %}
+                <a class="forward" onclick="plusSlides(1)">&#10095;</a>
+                {% endif %}
+            </div>
+            {% endfor %}
         </div>
         <div class="roomListRoom__content">
             <a>{{tour.name}}</a>
@@ -24,8 +36,16 @@
 
     {% for day in days %}
     <div class="roomListRoom" style="width:90%;margin-left: auto;margin-right: auto;display: block;text-align: center;">
-        <div>
-            <img src="{{day.image.url}}" alt="img" style="border-radius: 5px">
+        <div class="slideshow-container fade">
+            {% for image in day.images.all %}
+            <div class="Containers Carousel">
+                <a class="Back" onclick="plusSlides(-1)">&#10094;</a>
+                <img src="{{image.image.url}}" alt="img" style="width:100%; border-radius: 5px">
+                <div class="MessageInfo">{{image.message}}</div>
+                <div class="Info">{{image.info}}</div>
+                <a class="forward" onclick="plusSlides(1)">&#10095;</a>
+            </div>
+            {% endfor %}
         </div>
         <div class="roomListRoom__content">
             {% for room in day.activities.all %}
@@ -36,7 +56,7 @@
             {% endfor %}
         </div>
         <div class="roomListRoom__meta">
-            <p class="roomListRoom__topic">{{day.name}}</p>
+            <a href="{% url 'day' day.id %}" class="roomListRoom__topic">{{day.name}}</a>
             <div>
                 {% for room in day.rooms.all %}
                 <a class="roomListRoom__topic" href="{% url 'room' room.id %}"> {{room.name}} </a>
@@ -46,5 +66,6 @@
     </div>
     {% endfor %}
 </main>
+<script src="/static/js/carousel.js"></script>
 <!-- <script src="script.js"></script> -->
 {% endblock %}
