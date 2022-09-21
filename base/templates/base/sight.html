@@ -22,15 +22,13 @@
                 <div class="slideshow-container fade" style="margin: 10px;">
                     {% for image in sight.images.all %}
                     <div class="Containers Carousel">
-                        <a class="Back" onclick="plusSlides(-1)">&#10094;</a>
                         <img src="{{image.image.url}}" alt="img" style="width:100%; border-radius: 5px">
                         <div class="MessageInfo">{{image.message}}</div>
                         <div class="Info">{{image.info}}</div>
-                        <a class="forward" onclick="plusSlides(1)">&#10095;</a>
                     </div>
                     {% endfor %}
                 </div>
-                <p style="padding: 15px; padding-top: 0%;">{{sight.description}}</p>
+                <p style="padding: 15px; padding-top: 0px;">{{sight.description}}</p>
             </div>
         </div>
 
