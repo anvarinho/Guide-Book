@@ -1,7 +1,6 @@
 from django.contrib import admin
 
 # Register your models here.
-# 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
 
 from .models import Activity, ImageModel, Region, Room, Location, Message, Sight, Tour, User, Day
 
